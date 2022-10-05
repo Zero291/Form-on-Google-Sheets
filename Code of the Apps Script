@@ -1,0 +1,153 @@
+
+//Función para generar el ID en automatico
+function introduceID(int){
+  var hoja = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('BOLSA DE TRABAJO Y SEGUIMIENTO A EGRESADOS');
+  //Obtenemos la fila del último registro
+  var ultimaFila = hoja.getLastRow();
+  var ultimoId = hoja.getRange("A"+ultimaFila).getValue();
+  var siguienteID = ultimoId + 1;
+  ////////var siguienteID = ultimaFila ;
+  //Asignamos el valor
+  //hoja.getRange(ultimaFila, 1).setValue(siguienteID);
+  return siguienteID;
+
+}
+
+// Función para limpiar las celdas 
+function Limpiar(){
+   var hojaActiva = SpreadsheetApp.getActiveSpreadsheet();
+   var Form_Bolsa = hojaActiva.getSheetByName("FormB");
+   /*
+   var celdasLimpiar= ["D5:F5", "D7:F7", "J7:L7", "D9:F9", "J9:L9", "D11:F11", "J11:L11", "D13:L13", "D15:L15", "D17:F17", "J17:L17"]; //Estas son las celdas que serán limpiadas
+   for(var i = 0; i < (celdasLimpiar[i]).length; i++){
+     Form_Bolsa.getRange(celdasLimpiar[i]).clearContent();
+   }*/
+
+  Form_Bolsa.getRange("D5:F5").clearContent();
+  Form_Bolsa.getRange("D7:F7").clearContent();
+  Form_Bolsa.getRange("J7:L7").clearContent();
+  Form_Bolsa.getRange("D9:F9").clearContent();
+  Form_Bolsa.getRange("J9:L9").clearContent();
+  Form_Bolsa.getRange("D11:F11").clearContent();
+  Form_Bolsa.getRange("J11:L11").clearContent();
+  Form_Bolsa.getRange("D13:L13").clearContent();
+  Form_Bolsa.getRange("D15:L15").clearContent();
+  Form_Bolsa.getRange("D17:F17").clearContent();
+  Form_Bolsa.getRange("J17:L17").clearContent();
+
+}
+
+// Guardar celdas
+function Guardar(){
+  var hojaActiva = SpreadsheetApp.getActiveSpreadsheet();
+  var Form_Bolsa = hojaActiva.getSheetByName("FormB"); // Nombre de hoja del formulario
+  var BolsaTrabajo = hojaActiva.getSheetByName("BOLSA DE TRABAJO Y SEGUIMIENTO A EGRESADOS"); // Nombre de hoja donde se almacenan datos
+
+  // Celdas de donde se obtendrán los datos a guardar     //Orden de los valores
+  var valores = [[introduceID(),   // ID
+                 Form_Bolsa.getRange("D7:F7").getValue(),   // Titulo de la oferta
+                 Form_Bolsa.getRange("J7:L7").getValue(),    // Salario
+                 Form_Bolsa.getRange("D9:F9").getValue(),    // Lugar
+                 Form_Bolsa.getRange("J9:L9").getValue(),    // Empresa
+                 Form_Bolsa.getRange("J11:L11").getValue(),  // Modalidad
+                 Form_Bolsa.getRange("D13:L13").getValue(),  // Requisitos
+                 Form_Bolsa.getRange("D11:F11").getValue(),  // Horario
+                 Form_Bolsa.getRange("D15:L15").getValue(),  // Descripción
+                 Form_Bolsa.getRange("D17:F17").getValue(),  // Fecha de publicación de la vacante
+                 Form_Bolsa.getRange("J17:L17").getValue(),  // Estatus
+                 ]];   //Fin
+
+  // Inyección de datos a hoja donde se almacenan datos
+  BolsaTrabajo.getRange(BolsaTrabajo.getLastRow()+1,1,1,11).setValues(valores); // El "11" es la cantidad de datos a almacenar
+
+  Limpiar(); // Ejecución de función para limpieza de celdas
+}
+
+// Buscar
+var NUM_COLUMNA_BUSQUEDA = 0;
+function Buscar() {
+
+  var hojaActiva = SpreadsheetApp.getActiveSpreadsheet();
+  var Form_Bolsa = hojaActiva.getSheetByName("FormB"); // Nombre de hoja del formulario
+ 
+  var valor = Form_Bolsa.getRange("D5:F5").getValue();
+  var valores = hojaActiva.getSheetByName("BOLSA DE TRABAJO Y SEGUIMIENTO A EGRESADOS").getDataRange().getValues(); // Nombre de hoja donde se almacenan datos
+  for (var i = 0; i < valores.length; i++) {
+     var fila = valores[i];
+    if (fila[NUM_COLUMNA_BUSQUEDA] == valor) {
+      
+      Form_Bolsa.getRange("D7:F7").setValue(fila[1]);
+      Form_Bolsa.getRange("J7:L7").setValue(fila[2]);
+      Form_Bolsa.getRange("D9:F9").setValue(fila[3]);
+      Form_Bolsa.getRange("J9:L9").setValue(fila[4]);
+      Form_Bolsa.getRange("J11:L11").setValue(fila[5]);
+      Form_Bolsa.getRange("D13:L13").setValue(fila[6]);
+      Form_Bolsa.getRange("D11:F11").setValue(fila[7]);
+      Form_Bolsa.getRange("D15:L15").setValue(fila[8]);
+      Form_Bolsa.getRange("D17:F17").setValue(fila[9]);
+      Form_Bolsa.getRange("J17:L17").setValue(fila[10]); 
+    }
+  }
+}
+
+
+// Actualizar
+function Actualizar(){
+  var hojaActiva = SpreadsheetApp.getActiveSpreadsheet();
+  var Form_Bolsa = hojaActiva.getSheetByName("FormB"); // Nombre de hoja del formulario
+  var datos = hojaActiva.getSheetByName("BOLSA DE TRABAJO Y SEGUIMIENTO A EGRESADOS"); // Nombre de hoja donde se almacenan datos
+  
+  var valor = Form_Bolsa.getRange("D5:F5").getValue();
+  var valores = hojaActiva.getSheetByName("BOLSA DE TRABAJO Y SEGUIMIENTO A EGRESADOS").getDataRange().getValues(); // Nombre de hoja donde se almacenan datos
+  for (var i = 0; i < valores.length; i++) {
+    var fila = valores[i];
+    if(fila[NUM_COLUMNA_BUSQUEDA] == valor) {
+      var INT_R = i+1
+      
+                                                             //Orden de los valores
+      var valores1 = [[valor,   // ID
+                 Form_Bolsa.getRange("D7:F7").getValue(),   // Titulo de la oferta
+                 Form_Bolsa.getRange("J7:L7").getValue(),    // Salario
+                 Form_Bolsa.getRange("D9:F9").getValue(),    // Lugar
+                 Form_Bolsa.getRange("J9:L9").getValue(),    // Empresa
+                 Form_Bolsa.getRange("J11:L11").getValue(),  // Modalidad
+                 Form_Bolsa.getRange("D13:L13").getValue(),  // Requisitos
+                 Form_Bolsa.getRange("D11:F11").getValue(),  // Horario
+                 Form_Bolsa.getRange("D15:L15").getValue(),  // Descripción
+                 Form_Bolsa.getRange("D17:F17").getValue(),  // Fecha de publicación de la vacante
+                 Form_Bolsa.getRange("J17:L17").getValue(),  // Estatus
+                 ]];   //Fin
+      
+      datos.getRange(INT_R, 1, 1, 11).setValues(valores1);
+      SpreadsheetApp.getUi().alert('Datos actualizados');
+
+      Limpiar(); // Ejecución de función para limpieza de celdas
+    }
+  }
+}
+
+// Eliminar
+function Eliminar() {
+  var hojaActiva = SpreadsheetApp.getActiveSpreadsheet();
+  var Form_Bolsa = hojaActiva.getSheetByName("FormB"); // Nombre de hoja del formulario
+  var datos = hojaActiva.getSheetByName("BOLSA DE TRABAJO Y SEGUIMIENTO A EGRESADOS"); // Nombre de hoja donde se almacenan datos
+  
+  var interface = SpreadsheetApp.getUi();
+  var respuesta = interface.alert('¿Está seguro que desea borrar la oferta?',interface.ButtonSet.YES_NO);
+  
+  // Proceso si el usuario responde
+  if (respuesta == interface.Button.YES) {
+    
+    var valor = Form_Bolsa.getRange("D5:F5").getValue();
+    var valores = hojaActiva.getSheetByName("BOLSA DE TRABAJO Y SEGUIMIENTO A EGRESADOS").getDataRange().getValues(); // Nombre de hoja donde se almacenan datos
+    for (var i = 0; i< valores.length; i++) {
+      var fila = valores[i];
+      if (fila[NUM_COLUMNA_BUSQUEDA] == valor) {
+        var INT_R = i+1
+        
+        datos.deleteRow(INT_R);
+        Limpiar(); // Ejecución de función para limpieza de celdas
+      }
+    }
+  }
+}
